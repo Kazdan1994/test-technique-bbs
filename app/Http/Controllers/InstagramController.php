@@ -13,7 +13,12 @@ class InstagramController extends Controller
 {
     public function index()
     {
-        return view('instagram');
+        $user = InstagramUser::first();
+
+        return view('instagram', [
+            'userToken' => $user->access_token,
+            'username' => $user->username,
+        ]);
     }
 
     public function loginInstagram()
@@ -67,6 +72,7 @@ class InstagramController extends Controller
             'https://graph.instagram.com' . "/{$credential['user_id']}/media",
             [
                 'access_token' => $credential['access_token'],
+                'limit' => 5,
                 'fields' => 'id,media_url,media_type,permalink,thumbnail_url,timestamp,caption'
             ]
         );

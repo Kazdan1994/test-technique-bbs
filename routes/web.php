@@ -15,7 +15,9 @@ use App\Http\Controllers\InstagramController;
 */
 
 Route::get('/', [InstagramController::class, 'index']);
-Route::get('oauth', [InstagramController::class, 'loginInstagram']);
+Route::get('oauth', [InstagramController::class, 'loginInstagram'])
+    ->name('instagram.login');
 Route::get('oauth/callback/instagram', [InstagramController::class, 'instagramCallback']);
-Route::get('fetch-posts-instagram', [InstagramController::class, 'instagramFetchPost']);
+Route::get('fetch-posts-instagram', [InstagramController::class, 'instagramFetchPost'])
+    ->name('instagram.instagramFetchPost');
 Route::get('instagram-feeds', [InstagramController::class, 'instagramFeed']);
