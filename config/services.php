@@ -14,6 +14,14 @@ return [
     |
     */
 
+    'instagrambasic' => [
+        'client_id' => env('INSTAGRAMBASIC_CLIENT_ID'),
+        'client_secret' => env('INSTAGRAMBASIC_CLIENT_SECRET'),
+        'redirect' => env('INSTAGRAMBASIC_REDIRECT_URI'),
+        'token_url' => 'https://graph.instagram.com/access_token',
+    ],
+
+
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
         'secret' => env('MAILGUN_SECRET'),
