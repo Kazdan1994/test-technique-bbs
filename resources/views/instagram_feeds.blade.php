@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="bg-gray-100">
+    <div class="bg-gray-100 min-h-screen">
         <div class="text-center p-10">
             <h1 class="font-bold text-4xl mb-4">Latest 5 Instagram Posts</h1>
         </div>

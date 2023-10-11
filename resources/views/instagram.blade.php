@@ -11,9 +11,9 @@
 @section('content')
     <div class="bg-gray-100 min-h-screen flex items-center justify-center">
         <div class="text-center">
-            <div class="flex justify-between items-center">
-                <img height="100" width="100" src="{{URL::asset('/images/instagram.png')}}" alt="Instagram"/>
-                <h1 class="text-3xl font-semibold text-gray-800"> Instagram</h1>
+            <div class="flex justify-center items-center">
+                <img class="mr-4" height="100" width="100" src="{{URL::asset('/images/instagram.png')}}" alt="Instagram"/>
+                <h1 class="text-3xl font-semibold text-gray-800">Instagram</h1>
             </div>
             @if(isset($userToken) && isset($username))
                 <p class="mt-4 text-gray-600">Click the button below to get the instagram posts of

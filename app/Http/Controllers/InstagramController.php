@@ -14,11 +14,16 @@ class InstagramController extends Controller
     public function index()
     {
         $user = InstagramUser::first();
+        $params = [];
 
-        return view('instagram', [
-            'userToken' => $user->access_token,
-            'username' => $user->username,
-        ]);
+        if (isset($user)) {
+           $params = [
+               'userToken' => $user->access_token,
+               'username' => $user->username,
+           ];
+        }
+
+        return view('instagram', $params);
     }
 
     public function loginInstagram()
@@ -44,11 +49,12 @@ class InstagramController extends Controller
         ]);
 
         $new_token = json_decode($response->body(), true);
+        $username = $userdata->user['username'];
 
-        $instagram_user = InstagramUser::where('username', $userdata->user['username'])->first();
+        $instagram_user = InstagramUser::where('username', )->first();
         if ($instagram_user == null) {
             $create = InstagramUser::create([
-                'username' => $userdata->user['username'],
+                'username' => $username,
                 'user_id' => $userdata->id,
                 'state' => request('state'),
                 'access_token' => $new_token['access_token'],
@@ -62,7 +68,7 @@ class InstagramController extends Controller
             ]);
         }
 
-        return redirect('/');
+        return redirect("fetch-posts-instagram?username=$username");
     }
 
     public function instagramFetchPost(Request $request)
