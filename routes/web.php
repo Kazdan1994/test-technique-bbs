@@ -14,7 +14,7 @@ use App\Http\Controllers\InstagramController;
 |
 */
 
-Route::get('/', [InstagramController::class, 'index']);
+Route::get('/', [InstagramController::class, 'index'])->name('instagram.home');
 Route::get('oauth', [InstagramController::class, 'loginInstagram'])
     ->name('instagram.login');
 Route::get('oauth/callback/instagram', [InstagramController::class, 'instagramCallback']);

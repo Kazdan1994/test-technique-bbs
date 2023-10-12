@@ -17,10 +17,9 @@ class InstagramController extends Controller
         $params = [];
 
         if (isset($user)) {
-           $params = [
-               'userToken' => $user->access_token,
-               'username' => $user->username,
-           ];
+            $params = [
+                'username' => $user->username,
+            ];
         }
 
         return view('instagram', $params);
@@ -51,7 +50,7 @@ class InstagramController extends Controller
         $new_token = json_decode($response->body(), true);
         $username = $userdata->user['username'];
 
-        $instagram_user = InstagramUser::where('username', )->first();
+        $instagram_user = InstagramUser::where('username',)->first();
         if ($instagram_user == null) {
             $create = InstagramUser::create([
                 'username' => $username,
@@ -118,6 +117,8 @@ class InstagramController extends Controller
     public function instagramFeed()
     {
         $instagram_posts = InstagramPost::get();
-        return view('instagram_feeds', compact('instagram_posts'));
+        $user = InstagramUser::first();
+
+        return view('instagram_feeds', ['instagram_posts' => $instagram_posts, 'username' => $user->username]);
     }
 }

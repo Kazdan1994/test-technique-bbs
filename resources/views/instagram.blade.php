@@ -15,10 +15,10 @@
                 <img class="mr-4" height="100" width="100" src="{{URL::asset('/images/instagram.png')}}" alt="Instagram"/>
                 <h1 class="text-3xl font-semibold text-gray-800">Instagram</h1>
             </div>
-            @if(isset($userToken) && isset($username))
+            @if(isset($username))
                 <p class="mt-4 text-gray-600">Click the button below to get the instagram posts of
                     <a
-                        href="https://www.instagram.com/jacquemin.arthur/"
+                        href="https://www.instagram.com/{{ $username }}/"
                         class="text-blue-500 active:text-blue-600"
                         target="_blank"
                         rel="noopener noreferrer"
