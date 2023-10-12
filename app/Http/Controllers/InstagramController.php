@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\InstagramPost;
-use App\Models\InstagramUser;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Carbon;
@@ -13,12 +14,13 @@ class InstagramController extends Controller
 {
     public function index()
     {
-        $user = InstagramUser::first();
+        $user = Auth::user();
+
         $params = [];
 
-        if (isset($user)) {
+        if (isset($user->instagram_username)) {
             $params = [
-                'username' => $user->username,
+                'username' => $user->instagram_username,
             ];
         }
 
@@ -50,20 +52,15 @@ class InstagramController extends Controller
         $new_token = json_decode($response->body(), true);
         $username = $userdata->user['username'];
 
-        $instagram_user = InstagramUser::where('username',)->first();
-        if ($instagram_user == null) {
-            $create = InstagramUser::create([
-                'username' => $username,
-                'user_id' => $userdata->id,
-                'state' => request('state'),
-                'access_token' => $new_token['access_token'],
-                'token_expired_at' => now()->addSeconds($new_token['expires_in'])
-            ]);
-        } else {
-            $update = $instagram_user->update([
-                'state' => request('state'),
-                'access_token' => $new_token['access_token'],
-                'token_expired_at' => now()->addSeconds($new_token['expires_in'])
+        $instagram_user = User::user();
+
+        if ($instagram_user->instagram_user_id === null) {
+            $instagram_user->update([
+                'instagram_username' => $username,
+                'instagram_user_id' => $userdata->id,
+                'instagram_state' => request('state'),
+                'instagram_access_token' => $new_token['access_token'],
+                'instagram_token_expired_at' => now()->addSeconds($new_token['expires_in'])
             ]);
         }
 
@@ -72,11 +69,12 @@ class InstagramController extends Controller
 
     public function instagramFetchPost(Request $request)
     {
-        $credential = InstagramUser::where('username', $request->username)->first();
+        $credential = Auth::user();
+
         $response = Http::get(
-            'https://graph.instagram.com' . "/{$credential['user_id']}/media",
+            'https://graph.instagram.com' . "/{$credential['instagram_user_id']}/media",
             [
-                'access_token' => $credential['access_token'],
+                'access_token' => $credential['instagram_access_token'],
                 'limit' => 5,
                 'fields' => 'id,media_url,media_type,permalink,thumbnail_url,timestamp,caption'
             ]
@@ -95,9 +93,9 @@ class InstagramController extends Controller
             ];
         }
 
-        $delete_posts = InstagramPost::truncate();
+        InstagramPost::truncate();
 
-        $upsert_medias = InstagramPost::insert(
+        InstagramPost::insert(
             $parsed_feed,
             [
                 'media_id',
@@ -117,8 +115,11 @@ class InstagramController extends Controller
     public function instagramFeed()
     {
         $instagram_posts = InstagramPost::get();
-        $user = InstagramUser::first();
+        $user = User::user();
 
-        return view('instagram_feeds', ['instagram_posts' => $instagram_posts, 'username' => $user->username]);
+        return view('instagram_feeds', [
+            'instagram_posts' => $instagram_posts,
+            'username' => $user->instagram_username
+        ]);
     }
 }

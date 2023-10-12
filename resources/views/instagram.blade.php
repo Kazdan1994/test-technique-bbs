@@ -1,18 +1,8 @@
-@extends('layouts.app')
-
-@section('title')
-    @if(isset($userToken))
-        Get your Instagram posts.
-    @else
-        Connect with Instagram
-    @endif
-@endsection
-
-@section('content')
-    <div class="bg-gray-100 min-h-screen flex items-center justify-center">
+<x-app-layout>
+    <div class="bg-gray-100 flex full-height items-center justify-center">
         <div class="text-center">
             <div class="flex justify-center items-center">
-                <img class="mr-4" height="100" width="100" src="{{URL::asset('/images/instagram.png')}}" alt="Instagram"/>
+                <img class="mr-4" height="100" width="100" src="{{URL::asset('/images/instagram.svg')}}" alt="Instagram"/>
                 <h1 class="text-3xl font-semibold text-gray-800">Instagram</h1>
             </div>
             @if(isset($username))
@@ -38,4 +28,4 @@
             @endif
         </div>
     </div>
-@endsection
+</x-app-layout>

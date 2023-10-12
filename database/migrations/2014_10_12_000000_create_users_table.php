@@ -18,6 +18,11 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->string('instagram_username')->nullable();
+            $table->string('instagram_user_id')->nullable();
+            $table->string('instagram_state')->nullable();
+            $table->string('instagram_access_token')->nullable();
+            $table->string('instagram_token_expired_at')->nullable();
             $table->timestamps();
         });
     }

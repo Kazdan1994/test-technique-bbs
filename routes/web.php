@@ -1,7 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InstagramController;
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,10 +15,19 @@ use App\Http\Controllers\InstagramController;
 |
 */
 
-Route::get('/', [InstagramController::class, 'index'])->name('instagram.home');
-Route::get('oauth', [InstagramController::class, 'loginInstagram'])
-    ->name('instagram.login');
-Route::get('oauth/callback/instagram', [InstagramController::class, 'instagramCallback']);
-Route::get('fetch-posts-instagram', [InstagramController::class, 'instagramFetchPost'])
-    ->name('instagram.instagramFetchPost');
-Route::get('instagram-feeds', [InstagramController::class, 'instagramFeed']);
+Route::middleware('auth')->group(function () {
+    Route::get('/', [InstagramController::class, 'index'])->name('instagram.home');
+    Route::get('oauth', [InstagramController::class, 'loginInstagram'])
+        ->name('instagram.login');
+    Route::get('oauth/callback/instagram', [InstagramController::class, 'instagramCallback']);
+    Route::get('fetch-posts-instagram', [InstagramController::class, 'instagramFetchPost'])
+        ->name('instagram.instagramFetchPost');
+    Route::get('instagram-feeds', [InstagramController::class, 'instagramFeed'])
+        ->name('instagram.instagramFeed');
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
