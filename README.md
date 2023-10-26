@@ -42,7 +42,7 @@ Follow these steps to set up and run the project.
 
 5. Start the Laravel development server:
     ```bash
-    php artisan serve
+    vendor/bin/sail up
     ```
 
 6. You'll need a tunnel for your app
