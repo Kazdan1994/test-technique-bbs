@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\InstagramPost;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +14,7 @@ use Illuminate\Support\Carbon;
 
 class InstagramController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $user = Auth::user();
 
@@ -27,7 +29,7 @@ class InstagramController extends Controller
         return view('instagram', $params);
     }
 
-    public function loginInstagram()
+    public function loginInstagram(): RedirectResponse
     {
         $url = Socialite::driver('instagrambasic')
             ->setScopes(['user_profile', 'user_media'])
@@ -37,7 +39,7 @@ class InstagramController extends Controller
         return redirect()->away($url);
     }
 
-    public function instagramCallback()
+    public function instagramCallback(): RedirectResponse
     {
         $driver = Socialite::driver('instagrambasic');
         $credential = $driver->getAccessTokenResponse(request('code'));
@@ -67,7 +69,7 @@ class InstagramController extends Controller
         return redirect("fetch-posts-instagram?username=$username");
     }
 
-    public function instagramFetchPost(Request $request)
+    public function instagramFetchPost(Request $request): RedirectResponse
     {
         $credential = Auth::user();
 
@@ -112,7 +114,7 @@ class InstagramController extends Controller
         return redirect('instagram-feeds');
     }
 
-    public function instagramFeed()
+    public function instagramFeed(): View
     {
         $instagram_posts = InstagramPost::get();
         $user = User::user();
